@@ -9,8 +9,6 @@ from reed import ReedClient
 from util.DataProcessor import DataProcessor
 from util.HTMLParser import MyHTMLParser
 
-env_vars = os.environ.copy()
-
 
 @click.group()
 def cli():
@@ -18,12 +16,15 @@ def cli():
 
 
 @cli.command('job_search')
-@click.option('--query', required=True, type=str, help='Job search query')
-@click.option('--num_jobs', default=10, help='Number of jobs to show')
-@click.option('--since', default=7, help='How many days back to search')
+@click.option('--query', help='Job search query', required=True, type=str)
+@click.option('--num_jobs', help='Number of jobs to show', default=10)
+@click.option('--since', help='How many days back to search', default=7)
 @click.option('--location', default=None, type=str,
               help='Where to perform job search')
 def job_search(query, num_jobs, since, location):
+    '''
+    Search for jobs with requested filters.
+    '''
     try:
         API_KEY = os.environ['API_KEY']
     except KeyError:
@@ -32,15 +33,12 @@ def job_search(query, num_jobs, since, location):
 
     client = ReedClient(api_key=API_KEY)
     processor = DataProcessor()
-
     params = {
         'keywords': urllib.parse.quote_plus(query),
         'locationName': location
     }
     result = client.search(**params)
-
     all_jobs = processor.process_returned_data(result)
-
     relevant_jobs, date = processor.remove_irrelevant_jobs(all_jobs, since)
 
     if relevant_jobs.shape[0] == 0:
@@ -52,7 +50,6 @@ def job_search(query, num_jobs, since, location):
                     'minimumSalary',
                     'locationName',
                     'jobId']
-
     num_rel_jobs = str(relevant_jobs.shape[0])
     print(f'Jobs posted since {date}: {num_rel_jobs}')
     print()
@@ -72,8 +69,15 @@ def job_search(query, num_jobs, since, location):
               type=int,
               help='Reed job id')
 def job_desc(job_id):
-    """Simple program that displays job descriptions."""
-    API_KEY = env_vars['API_KEY']
+    """
+    Display job descriptions for job with given id.
+    """
+    try:
+        API_KEY = os.environ['API_KEY']
+    except KeyError:
+        print("'API_KEY' not found in environment variables.")
+        return
+
     client = ReedClient(API_KEY)
     result = client.job_details(job_id=job_id)
     job_desc_html, job_url = result['jobDescription'], result['jobUrl']
