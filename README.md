@@ -37,7 +37,7 @@ out in the terminal with a small number of basic job details.
 The job search can be narrowed down by providing additional arguments; the
 options provided are currently query, num_jobs, days and location.
 
-#### job_desc
+### job_desc
 
 This function prints out the full job description of the job with a given job_id,
 along with the url for the job entry on the Reed website.
