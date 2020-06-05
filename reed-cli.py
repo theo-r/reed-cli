@@ -16,12 +16,14 @@ def cli():
 
 
 @cli.command('job_search')
-@click.option('--query', help='Job search query', required=True, type=str)
-@click.option('--num_jobs', help='Number of jobs to show', default=10)
-@click.option('--since', help='How many days back to search', default=7)
+@click.option('--query', help='Job search query.', type=str)
+@click.option('--num_jobs', help='Number of jobs to show. Jobs are shown in '
+              'reverse chronological order. The default is 10.', default=10)
+@click.option('--days', help='How many days back to search. The '
+              'default is 7.', default=7)
 @click.option('--location', default=None, type=str,
-              help='Where to perform job search')
-def job_search(query, num_jobs, since, location):
+              help='Where to perform job search.')
+def job_search(query, num_jobs, days, location):
     '''
     Search for jobs with requested filters.
     '''
@@ -39,7 +41,7 @@ def job_search(query, num_jobs, since, location):
     }
     result = client.search(**params)
     all_jobs = processor.process_returned_data(result)
-    relevant_jobs, date = processor.remove_irrelevant_jobs(all_jobs, since)
+    relevant_jobs, date = processor.remove_irrelevant_jobs(all_jobs, days)
 
     if relevant_jobs.shape[0] == 0:
         print(f'Jobs posted since {date}: 0')
