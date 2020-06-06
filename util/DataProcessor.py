@@ -23,8 +23,10 @@ class DataProcessor():
     def remove_irrelevant_jobs(self, df, since):
         date = str(datetime.now().date() + timedelta(days=-since))
 
-        terms_to_avoid = 'Senior|Lead|Principal|Apprentice' \
-            '|Director|Manager|Head'
+        # terms_to_avoid = 'Senior|Lead|Principal|Apprentice' \
+        #     '|Director|Manager|Head'
+
+        terms_to_avoid = 'Director'
 
         relevant_jobs = (df[~df.jobTitle.str.contains(terms_to_avoid)]
                          .query('date > @date')
