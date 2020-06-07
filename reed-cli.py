@@ -23,7 +23,9 @@ def cli():
               'default is 7.', default=7)
 @click.option('--location', default=None, type=str,
               help='Where to perform job search.')
-def job_search(query, num_jobs, days, location):
+@click.option('--max_results', default=10000, type=int,
+              help='Max results from the API call.')
+def job_search(query, num_jobs, days, location, max_results):
     '''
     Search for jobs with requested filters.
     '''
@@ -37,7 +39,8 @@ def job_search(query, num_jobs, days, location):
     processor = DataProcessor()
     params = {
         'keywords': urllib.parse.quote_plus(query),
-        'locationName': location
+        'locationName': location,
+        'resultsToTake': max_results
     }
     result = client.search(**params)
     all_jobs = processor.process_returned_data(result)
