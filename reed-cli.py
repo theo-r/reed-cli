@@ -43,6 +43,11 @@ def job_search(query, num_jobs, days, location, max_results):
         'resultsToTake': max_results
     }
     result = client.search(**params)
+
+    if not result:
+        print('No jobs found with search parameters')
+        return
+
     all_jobs = processor.process_returned_data(result)
     relevant_jobs, date = processor.remove_irrelevant_jobs(all_jobs, days)
 
