@@ -3,3 +3,4 @@ __pycache__/
 creds.json
 reed.ipynb
 .vscode/
+setup.sh
