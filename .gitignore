@@ -4,3 +4,4 @@ creds.json
 reed.ipynb
 .vscode/
 setup.sh
+Pipfile.lock

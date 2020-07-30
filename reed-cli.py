@@ -74,10 +74,7 @@ def job_search(query, num_jobs, days, location, max_results):
 
 
 @cli.command('job_desc')
-@click.option('--job_id',
-              required=True,
-              type=int,
-              help='Reed job id')
+@click.option('--job_id', required=True, type=int, help='Reed job id')
 def job_desc(job_id):
     """
     Display job descriptions for job with given id.
